@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attendance Monitoring</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+    <div>
+        <h2>WorkTrack</h2>
+        <p>Employee Attendance Monitoring System</p>
+    </div>
+    <span id="today"></span>
+</header>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <h3>MENU</h3>
+        <button onclick="showPage('dashboard')">📊 Dashboard</button>
+        <button onclick="showPage('companies')">🏢 Companies</button>
+        <button onclick="showPage('employees')">👥 Employees</button>
+        <button onclick="showPage('attendance')">📅 Attendance</button>
+        <button onclick="showPage('reports')">📑 Reports</button>
+    </aside>
+
+    <main class="main">
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page">
+            <h2>Dashboard Overview</h2>
+            <p>Monitor your employees and attendance records.</p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Companies</h3>
+                    <h1 id="totalCompanies">0</h1>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Total Employees</h3>
+                    <h1 id="totalEmployees">0</h1>
+                </div>
+
+                <div class="stat-card present">
+                    <h3>Present Today</h3>
+                    <h1 id="totalPresent">0</h1>
+                </div>
+
+                <div class="stat-card absent">
+                    <h3>Absent Today</h3>
+                    <h1 id="totalAbsent">0</h1>
+                </div>
+
+                <div class="stat-card leave">
+                    <h3>On Leave Today</h3>
+                    <h1 id="totalLeave">0</h1>
+                </div>
+            </div>
+
+            <h3>Company Attendance Summary</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Employees</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Leave</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboardTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- COMPANIES -->
+        <section id="companies" class="page hidden">
+            <h2>Company Management</h2>
+            <p>Add, edit, or remove company records.</p>
+
+            <form id="companyForm">
+                <input type="hidden" id="companyId">
+
+                <input
+                    type="text"
+                    id="companyName"
+                    placeholder="Enter company name"
+                    required
+                    maxlength="60">
+
+                <button type="submit" id="companySubmit">
+                    Add Company
+                </button>
+
+                <button type="button" class="secondary hidden"
+                    id="cancelCompanyEdit">
+                    Cancel
+                </button>
+            </form>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Employees</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="companyTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- EMPLOYEES -->
+        <section id="employees" class="page hidden">
+            <h2>Employee Management</h2>
+            <p>Manage employee information and records.</p>
+
+            <form id="employeeForm">
+                <input type="hidden" id="employeeId">
+
+                <input type="text" id="employeeName"
+                    placeholder="Full Name" required maxlength="80">
+
+                <input type="email" id="employeeEmail"
+                    placeholder="Gmail / Email" required maxlength="100">
+
+                <input type="tel" id="employeePhone"
+                    placeholder="Phone Number" required
+                    pattern="[0-9+() -]{7,20}" maxlength="20">
+
+                <input type="text" id="employeePosition"
+                    placeholder="Position" required maxlength="60">
+
+                <select id="employeeCompany" required>
+                    <option value="">Select Company</option>
+                </select>
+
+                <button type="submit" id="employeeSubmit">
+                    Add Employee
+                </button>
+
+                <button type="button" class="secondary hidden"
+                    id="cancelEmployeeEdit">
+                    Cancel
+                </button>
+            </form>
+
+            <div class="filters">
+                <input type="search" id="employeeSearch"
+                    placeholder="Search employee...">
+
+                <select id="employeeCompanyFilter">
+                    <option value="all">All Companies</option>
+                </select>
+
+                <select id="employeeSort">
+                    <option value="name">Sort: Name A-Z</option>
+                    <option value="nameDesc">Name Z-A</option>
+                    <option value="company">Company</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Position</th>
+                            <th>Company</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ATTENDANCE -->
+        <section id="attendance" class="page hidden">
+            <h2>Attendance Monitoring</h2>
+            <p>Update employee attendance for a selected date.</p>
+
+            <div class="filters">
+                <input type="date" id="attendanceDate">
+
+                <select id="attendanceCompanyFilter">
+                    <option value="all">All Companies</option>
+                </select>
+
+                <input type="search" id="attendanceSearch"
+                    placeholder="Search employee...">
+
+                <select id="attendanceStatusFilter">
+                    <option value="all">All Status</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                    <option value="Leave">Leave</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Company</th>
+                            <th>Attendance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section id="reports" class="page hidden">
+            <h2>Attendance Reports</h2>
+            <p>View attendance summaries and download records.</p>
+
+            <div class="filters">
+                <input type="date" id="reportDate">
+
+                <select id="reportCompanyFilter">
+                    <option value="all">All Companies</option>
+                </select>
+
+                <button onclick="exportCSV()">Download CSV</button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Records</h3>
+                    <h1 id="reportTotal">0</h1>
+                </div>
+                <div class="stat-card present">
+                    <h3>Present</h3>
+                    <h1 id="reportPresent">0</h1>
+                </div>
+                <div class="stat-card absent">
+                    <h3>Absent</h3>
+                    <h1 id="reportAbsent">0</h1>
+                </div>
+                <div class="stat-card leave">
+                    <h3>Leave</h3>
+                    <h1 id="reportLeave">0</h1>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Employee</th>
+                            <th>Company</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            Employee Attendance Monitoring System © 2026
+        </footer>
+
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
